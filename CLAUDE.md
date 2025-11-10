@@ -46,6 +46,53 @@ gh issue reopen 123                    # Reopen closed issue
 gh issue comment 123 --body "Update here"
 ```
 
+### Git Worktree Management
+
+Use the `./wt` script to create isolated worktrees for feature branches. This allows you to work on multiple branches simultaneously without switching contexts.
+
+**Usage:**
+
+```bash
+./wt feature/new-feature              # Create worktree for new branch
+./wt feature/existing-branch          # Create worktree for existing branch
+```
+
+**What it does:**
+
+1. Creates a new git worktree in `../feature/new-feature`
+2. Copies `.env` file to the new worktree
+3. Installs dependencies with `pnpm install`
+4. Ready to use - just `cd ../feature/new-feature`
+
+**Benefits:**
+
+- Work on multiple features simultaneously
+- No need to stash/commit changes when switching tasks
+- Each worktree has its own `node_modules` and build output
+- Share git history but maintain separate working directories
+
+**Example workflow:**
+
+```bash
+# Working on main branch
+./wt feature/add-auth               # Create worktree for auth feature
+cd ../feature/add-auth              # Switch to new worktree
+pnpm dev                            # Start dev server for this branch
+
+# In another terminal, work on a different feature
+cd ~/github/simple-agent-spartaclub
+./wt feature/ui-improvements        # Create another worktree
+cd ../feature/ui-improvements
+pnpm dev                            # Run on different port
+```
+
+**Cleanup:**
+
+```bash
+git worktree remove ../feature/branch-name    # Remove worktree when done
+git worktree list                              # View all worktrees
+```
+
 ## Environment Setup
 
 Required environment variables (see `.env.example`):

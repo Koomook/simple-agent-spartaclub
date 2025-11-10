@@ -1,0 +1,24 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model courses {
+  id                      Int       @id @default(autoincrement())
+  title                   String    @db.VarChar(500)
+  description             String?
+  price                   String?   @db.VarChar(100)
+  url                     String    @unique @db.VarChar(500)
+  category                String    @db.VarChar(100)
+  is_free                 Boolean?  @default(false)
+  is_government_supported Boolean?  @default(false)
+  created_at              DateTime? @default(now()) @db.Timestamp(6)
+
+  @@index([category], map: "idx_category")
+  @@index([is_free], map: "idx_is_free")
+  @@index([is_government_supported], map: "idx_is_government_supported")
+}

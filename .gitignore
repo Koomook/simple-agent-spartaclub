@@ -45,3 +45,4 @@ venv/
 
 # Python data analysis scripts (exploratory)
 scripts/*.py
+/lib/generated/prisma

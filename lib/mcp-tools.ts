@@ -1,5 +1,6 @@
 import { createSdkMcpServer } from "@anthropic-ai/claude-agent-sdk";
 import { helloWorldTool } from "./mcp-tools/hello-world";
+import { searchCourses } from "./mcp-tools/search-courses";
 
 /**
  * Custom MCP Server
@@ -19,6 +20,7 @@ export const customMcpServer = createSdkMcpServer({
   version: "1.0.0",
   tools: [
     helloWorldTool,
+    searchCourses,
     // Add your custom tools here
   ],
 });

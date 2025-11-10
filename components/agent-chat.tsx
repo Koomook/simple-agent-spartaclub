@@ -284,67 +284,67 @@ export function AgentChat() {
         <div className="flex flex-col gap-4 w-full">
           <div className="flex flex-col gap-0.5 sm:text-2xl text-xl w-full">
             <div className="flex flex-row gap-2 items-center">
-              <div>Claude Agent Template</div>
+              <div>스파르타코딩클럽 강의 검색</div>
             </div>
             <div className="dark:text-zinc-500 text-zinc-400">
-              AI Agent powered by Claude Agent SDK with custom MCP tools
+              48개의 강의를 AI로 쉽게 찾아보세요
             </div>
             <div className="dark:text-zinc-600 text-zinc-500 text-sm mt-2">
-              Multi-turn agentic workflows · Custom tool integration · Real-time streaming
+              무료 강의 · 국비지원 · AI·GPT · 개발 · 데이터 · 취업·자격증
             </div>
           </div>
 
-          {/* Example prompts */}
+          {/* Course search scenario buttons */}
           <div className="flex flex-col gap-3 w-full">
             <div className="text-sm dark:text-zinc-400 text-zinc-600 font-medium">
-              Try these examples
+              어떤 강의를 찾으시나요?
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <button
-                onClick={() => sendMessage("Say hello to Alice in Korean")}
+                onClick={() => sendMessage("무료로 들을 수 있는 강의를 보여줘")}
                 className="text-left p-4 rounded-lg border dark:border-zinc-700 border-zinc-200 dark:bg-zinc-800/50 bg-zinc-50 hover:dark:bg-zinc-800 hover:bg-zinc-100 transition-colors"
               >
                 <div className="text-sm font-medium dark:text-zinc-200 text-zinc-800">
-                  Hello World Tool
+                  💰 무료로 시작하는 강의
                 </div>
                 <div className="text-xs dark:text-zinc-500 text-zinc-600 mt-1">
-                  Test the example MCP tool with multilingual greetings
+                  무료로 배울 수 있는 강의를 찾아드려요
                 </div>
               </button>
 
               <button
-                onClick={() => sendMessage("Read the README.md file and summarize what this template does")}
+                onClick={() => sendMessage("AI·GPT 관련 강의를 찾아줘")}
                 className="text-left p-4 rounded-lg border dark:border-zinc-700 border-zinc-200 dark:bg-zinc-800/50 bg-zinc-50 hover:dark:bg-zinc-800 hover:bg-zinc-100 transition-colors"
               >
                 <div className="text-sm font-medium dark:text-zinc-200 text-zinc-800">
-                  File Operations
+                  🤖 AI·GPT 강의
                 </div>
                 <div className="text-xs dark:text-zinc-500 text-zinc-600 mt-1">
-                  Use built-in Read tool to access files
+                  인공지능과 GPT를 배우고 싶어요
                 </div>
               </button>
 
               <button
-                onClick={() => sendMessage("Search for 'tool' in the codebase and show me where custom tools are defined")}
+                onClick={() => sendMessage("국비 지원되는 강의를 추천해줘")}
                 className="text-left p-4 rounded-lg border dark:border-zinc-700 border-zinc-200 dark:bg-zinc-800/50 bg-zinc-50 hover:dark:bg-zinc-800 hover:bg-zinc-100 transition-colors"
               >
                 <div className="text-sm font-medium dark:text-zinc-200 text-zinc-800">
-                  Code Search
+                  🎓 국비지원 강의
                 </div>
                 <div className="text-xs dark:text-zinc-500 text-zinc-600 mt-1">
-                  Use Grep tool to search through code
+                  국비 지원으로 부담 없이 시작하세요
                 </div>
               </button>
 
               <button
-                onClick={() => sendMessage("What custom tools are available?")}
+                onClick={() => sendMessage("취업이나 이직 준비에 도움되는 강의를 찾아줘")}
                 className="text-left p-4 rounded-lg border dark:border-zinc-700 border-zinc-200 dark:bg-zinc-800/50 bg-zinc-50 hover:dark:bg-zinc-800 hover:bg-zinc-100 transition-colors"
               >
                 <div className="text-sm font-medium dark:text-zinc-200 text-zinc-800">
-                  Agent Capabilities
+                  💼 취업·이직 준비
                 </div>
                 <div className="text-xs dark:text-zinc-500 text-zinc-600 mt-1">
-                  Learn about available tools and features
+                  취업과 이직에 필요한 스킬을 배워요
                 </div>
               </button>
             </div>
