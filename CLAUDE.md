@@ -14,6 +14,38 @@ pnpm start         # Start production server
 pnpm lint          # Run ESLint
 ```
 
+### GitHub Issue Management
+
+```bash
+# View issues
+gh issue list                          # List all open issues
+gh issue list --state all              # List all issues (open and closed)
+gh issue list --label "bug"            # List issues with specific label
+gh issue list --assignee @me           # List issues assigned to you
+
+# Create issue
+gh issue create                        # Create issue interactively
+gh issue create --title "Bug: Fix login" --body "Description here"
+gh issue create --title "Feature" --label "enhancement" --assignee "@me"
+
+# View issue details
+gh issue view 123                      # View issue #123
+gh issue view 123 --web                # Open issue #123 in browser
+
+# Update issue
+gh issue edit 123 --title "New title"
+gh issue edit 123 --add-label "bug,priority"
+gh issue edit 123 --add-assignee "@me"
+
+# Close/Reopen issue
+gh issue close 123                     # Close issue #123
+gh issue close 123 --comment "Fixed"   # Close with comment
+gh issue reopen 123                    # Reopen closed issue
+
+# Comment on issue
+gh issue comment 123 --body "Update here"
+```
+
 ## Environment Setup
 
 Required environment variables (see `.env.example`):
