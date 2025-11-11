@@ -21,7 +21,7 @@ export function Input({
   return (
     <textarea
       className="mb-12 w-full bg-transparent outline-none resize-none min-h-12 placeholder:text-zinc-400"
-      placeholder="Send a message"
+      placeholder="궁금한 강의를 물어보세요..."
       value={input}
       autoFocus
       onChange={(event) => {
@@ -36,7 +36,7 @@ export function Input({
           }
 
           if (isGeneratingResponse) {
-            toast.error("Please wait for the model to finish its response!");
+            toast.error("답변이 완료될 때까지 기다려주세요!");
 
             return;
           }

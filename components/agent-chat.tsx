@@ -19,7 +19,6 @@ export function AgentChat() {
   const [input, setInput] = useState<string>("");
   const [messages, setMessages] = useState<Array<UIMessage>>([]);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [processingStatus, setProcessingStatus] = useState<string>("");
   const [abortController, setAbortController] = useState<AbortController | null>(null);
   const [sessionId, setSessionId] = useState<string | undefined>(undefined);
 
@@ -39,7 +38,6 @@ export function AgentChat() {
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsGenerating(true);
-    setProcessingStatus("Initializing agent...");
 
     const controller = new AbortController();
     setAbortController(controller);
@@ -98,7 +96,6 @@ export function AgentChat() {
                 // Show debug info
                 const content = data.content as Record<string, unknown>;
                 console.log("🔍 Agent Debug:", content);
-                setProcessingStatus("Agent initialized");
               } else if (data.type === "stream_event") {
                 // Handle token-by-token streaming events
                 const content = data.content as Record<string, unknown>;
@@ -107,7 +104,6 @@ export function AgentChat() {
                 if (event.type === "content_block_start") {
                   // Start new content block
                   currentText = "";
-                  setProcessingStatus("Generating response...");
 
                   // Create new assistant message if not exists
                   if (!currentAssistantMessage) {
@@ -157,8 +153,6 @@ export function AgentChat() {
                     const toolName = String(toolBlock.name || "unknown");
                     const toolInput = toolBlock.input as Record<string, unknown> || {};
                     const toolUseId = String(toolBlock.id || "");
-
-                    setProcessingStatus(`Using tool: ${toolName}`);
 
                     // Create a tool use message
                     const toolMessage: UIMessage = {
@@ -216,7 +210,6 @@ export function AgentChat() {
                     // Only capture and show status for NEW sessions
                     setSessionId(newSessionId);
                     console.log(`📝 Session ID captured (new): ${newSessionId}`);
-                    setProcessingStatus("System initialized");
                   } else if (newSessionId && sessionId) {
                     // Session already exists, just log (don't show status)
                     console.log(`📝 Session ID (resumed): ${newSessionId}`);
@@ -226,8 +219,6 @@ export function AgentChat() {
                 // Handle final result
                 const content = data.content as Record<string, unknown>;
                 console.log("✅ Final result:", content);
-
-                setProcessingStatus("Complete");
 
                 // Show final stats
                 const statsMessage: UIMessage = {
@@ -257,7 +248,6 @@ export function AgentChat() {
       }
     } finally {
       setIsGenerating(false);
-      setProcessingStatus("");
       setAbortController(null);
     }
   };
@@ -284,67 +274,67 @@ export function AgentChat() {
         <div className="flex flex-col gap-4 w-full">
           <div className="flex flex-col gap-0.5 sm:text-2xl text-xl w-full">
             <div className="flex flex-row gap-2 items-center">
-              <div>스파르타코딩클럽 강의 검색</div>
+              <div className="font-bold text-sparta-red">스파르타 강의 검색 💡</div>
             </div>
-            <div className="dark:text-zinc-500 text-zinc-400">
-              48개의 강의를 AI로 쉽게 찾아보세요
+            <div className="dark:text-zinc-400 text-sparta-gray">
+              AI로 찾는 나에게 딱 맞는 강의
             </div>
-            <div className="dark:text-zinc-600 text-zinc-500 text-sm mt-2">
-              무료 강의 · 국비지원 · AI·GPT · 개발 · 데이터 · 취업·자격증
+            <div className="dark:text-zinc-500 text-sparta-gray text-sm mt-2">
+              무료 강의부터 국비지원 강의까지 · 실시간 AI 추천
             </div>
           </div>
 
           {/* Course search scenario buttons */}
           <div className="flex flex-col gap-3 w-full">
-            <div className="text-sm dark:text-zinc-400 text-zinc-600 font-medium">
-              어떤 강의를 찾으시나요?
+            <div className="text-sm dark:text-zinc-400 text-sparta-gray-600 font-medium">
+              이런 걸 물어보세요
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <button
-                onClick={() => sendMessage("무료로 들을 수 있는 강의를 보여줘")}
-                className="text-left p-4 rounded-lg border dark:border-zinc-700 border-zinc-200 dark:bg-zinc-800/50 bg-zinc-50 hover:dark:bg-zinc-800 hover:bg-zinc-100 transition-colors"
+                onClick={() => sendMessage("무료로 시작할 수 있는 강의를 추천해줘")}
+                className="text-left p-4 rounded-lg border-2 dark:border-sparta-red/30 border-sparta-red/20 dark:bg-zinc-800/50 bg-sparta-pink/30 hover:dark:bg-sparta-red/10 hover:bg-sparta-pink/50 hover:border-sparta-red/40 transition-colors"
               >
-                <div className="text-sm font-medium dark:text-zinc-200 text-zinc-800">
+                <div className="text-sm font-bold dark:text-zinc-200 text-sparta-dark">
                   💰 무료로 시작하는 강의
                 </div>
-                <div className="text-xs dark:text-zinc-500 text-zinc-600 mt-1">
-                  무료로 배울 수 있는 강의를 찾아드려요
+                <div className="text-xs dark:text-zinc-400 text-sparta-gray mt-1">
+                  부담 없이 시작할 수 있는 무료 강의를 찾아드려요
                 </div>
               </button>
 
               <button
-                onClick={() => sendMessage("AI·GPT 관련 강의를 찾아줘")}
-                className="text-left p-4 rounded-lg border dark:border-zinc-700 border-zinc-200 dark:bg-zinc-800/50 bg-zinc-50 hover:dark:bg-zinc-800 hover:bg-zinc-100 transition-colors"
+                onClick={() => sendMessage("AI나 GPT 관련 강의를 찾아줘")}
+                className="text-left p-4 rounded-lg border-2 dark:border-sparta-cyan/30 border-sparta-cyan/20 dark:bg-zinc-800/50 bg-sparta-light-blue/30 hover:dark:bg-sparta-cyan/10 hover:bg-sparta-light-blue/50 hover:border-sparta-cyan/40 transition-colors"
               >
-                <div className="text-sm font-medium dark:text-zinc-200 text-zinc-800">
+                <div className="text-sm font-bold dark:text-zinc-200 text-sparta-dark">
                   🤖 AI·GPT 강의
                 </div>
-                <div className="text-xs dark:text-zinc-500 text-zinc-600 mt-1">
-                  인공지능과 GPT를 배우고 싶어요
+                <div className="text-xs dark:text-zinc-400 text-sparta-gray mt-1">
+                  최신 AI 기술을 배울 수 있는 강의를 추천해드려요
                 </div>
               </button>
 
               <button
-                onClick={() => sendMessage("국비 지원되는 강의를 추천해줘")}
-                className="text-left p-4 rounded-lg border dark:border-zinc-700 border-zinc-200 dark:bg-zinc-800/50 bg-zinc-50 hover:dark:bg-zinc-800 hover:bg-zinc-100 transition-colors"
+                onClick={() => sendMessage("국비지원으로 들을 수 있는 강의를 알려줘")}
+                className="text-left p-4 rounded-lg border-2 dark:border-sparta-purple/30 border-sparta-purple/20 dark:bg-zinc-800/50 bg-purple-50 hover:dark:bg-sparta-purple/10 hover:bg-purple-100 hover:border-sparta-purple/40 transition-colors"
               >
-                <div className="text-sm font-medium dark:text-zinc-200 text-zinc-800">
+                <div className="text-sm font-bold dark:text-zinc-200 text-sparta-dark">
                   🎓 국비지원 강의
                 </div>
-                <div className="text-xs dark:text-zinc-500 text-zinc-600 mt-1">
-                  국비 지원으로 부담 없이 시작하세요
+                <div className="text-xs dark:text-zinc-400 text-sparta-gray mt-1">
+                  국비지원으로 부담 없이 배울 수 있는 강의예요
                 </div>
               </button>
 
               <button
-                onClick={() => sendMessage("취업이나 이직 준비에 도움되는 강의를 찾아줘")}
-                className="text-left p-4 rounded-lg border dark:border-zinc-700 border-zinc-200 dark:bg-zinc-800/50 bg-zinc-50 hover:dark:bg-zinc-800 hover:bg-zinc-100 transition-colors"
+                onClick={() => sendMessage("취업이나 이직 준비를 위한 강의를 추천해줘")}
+                className="text-left p-4 rounded-lg border-2 dark:border-zinc-600 border-zinc-300 dark:bg-zinc-800/50 bg-zinc-50 hover:dark:bg-zinc-700 hover:bg-zinc-100 hover:border-zinc-400 transition-colors"
               >
-                <div className="text-sm font-medium dark:text-zinc-200 text-zinc-800">
+                <div className="text-sm font-bold dark:text-zinc-200 text-sparta-dark">
                   💼 취업·이직 준비
                 </div>
-                <div className="text-xs dark:text-zinc-500 text-zinc-600 mt-1">
-                  취업과 이직에 필요한 스킬을 배워요
+                <div className="text-xs dark:text-zinc-400 text-sparta-gray mt-1">
+                  커리어 성장을 위한 실전 강의를 찾아드려요
                 </div>
               </button>
             </div>
@@ -366,10 +356,12 @@ export function AgentChat() {
           <div className="absolute bottom-2.5 right-2.5 flex flex-row gap-2">
             <button
               className={cn(
-                "size-8 flex flex-row justify-center items-center dark:bg-zinc-100 bg-zinc-900 dark:text-zinc-900 text-zinc-100 p-1.5 rounded-full hover:bg-zinc-800 dark:hover:bg-zinc-300 hover:scale-105 active:scale-95 transition-all",
+                "size-8 flex flex-row justify-center items-center bg-sparta-red text-white p-1.5 rounded-full hover:bg-sparta-red-hover hover:scale-105 active:scale-95 transition-all",
                 {
-                  "dark:bg-zinc-200 dark:text-zinc-500":
-                    isGenerating || input === "",
+                  "bg-sparta-gray-200 text-sparta-gray-600 cursor-not-allowed hover:bg-sparta-gray-200 hover:scale-100":
+                    !isGenerating && input === "",
+                  "bg-sparta-gray-600 hover:bg-sparta-gray-700":
+                    isGenerating,
                 },
               )}
               onClick={() => {

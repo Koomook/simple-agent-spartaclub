@@ -1,20 +1,42 @@
+/* Pretendard Font - Korean Web Font */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
+    /* Sparta Brand Colors - Light Mode */
     --background: #ffffff;
-    --foreground: #171717;
+    --foreground: #1E1E1E;
+    --sparta-red: #E8344E;
+    --sparta-red-hover: #D12342;
+    --sparta-red-light: #FF5A73;
+    --sparta-dark: #1E1E1E;
+    --sparta-gray: #666666;
+    --sparta-gray-light: #F5F5F5;
+    --sparta-border: #E0E0E0;
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --background: #0a0a0a;
-        --foreground: #ededed;
+        /* Sparta Brand Colors - Dark Mode */
+        --background: #1E1E1E;
+        --foreground: #FFFFFF;
+        --sparta-red: #FF5A73;
+        --sparta-red-hover: #FF7489;
+        --sparta-red-light: #E8344E;
+        --sparta-dark: #2D2D2D;
+        --sparta-gray: #CCCCCC;
+        --sparta-gray-light: #2D2D2D;
+        --sparta-border: #444444;
     }
 }
 
 body {
     color: var(--foreground);
     background: var(--background);
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    word-break: keep-all;
+    line-height: 1.7;
 }
