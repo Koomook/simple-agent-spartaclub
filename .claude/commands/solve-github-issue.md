@@ -90,3 +90,20 @@ This will:
 2. Implement using TDD with frequent commits
 3. Run E2E tests (Playwright if available)
 4. Update the GitHub issue with results
+
+## Final Phase Verification
+
+After all work, output a concise completion check:
+
+```
+🔍 WORKFLOW VERIFICATION
+
+✅ Phase 1: Planner executed → Plan created
+✅ Phase 2: Tests written → Implementation done → Tests passing → E2E tested ([N] commits)
+✅ Phase 3: SUCCESS/FAILURE flag documented
+✅ Phase 4: GitHub issue updated
+
+STATUS: ✅ COMPLETE | ⚠️ INCOMPLETE → Resume from Phase [N] | ❌ FAILED → [Action]
+```
+
+**Auto-recovery**: If any phase incomplete, immediately execute the missing step.

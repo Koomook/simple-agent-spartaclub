@@ -43,6 +43,10 @@ npx prisma generate
 ### 1.4 툴 등록
 `lib/mcp-tools.ts`에 `search-courses` 추가
 
+### ⚠️ 주의사항
+- **`prisma.config.ts` 생성 금지** (Next.js가 `.env` 자동 로드)
+- `app/api/agent/route.ts`에서 **allowedTools와 툴 설명만** 수정
+
 ## Phase 2: 브랜드 아이덴티티 적용
 
 ### 2.1 브랜드 추출 (Playwright MCP)
@@ -60,11 +64,8 @@ npx prisma generate
 - 한글 UI 라벨
 - 친근하고 격려하는 톤
 
-### 2.3 시스템 프롬프트 (app/api/agent/route.ts)
-- 역할: 스파르타 강의 추천 어시스턴트
-- 톤: 친근하고 격려하는 스타일
-- 무료/국비 지원 여부 강조
-- `search-courses` 툴 사용 가이드 포함
+### ⚠️ 주의사항
+시스템 프롬프트는 수정하지 않음
 
 ## 기술 요구사항
 - 읽기 전용 DB 연결 (SSL 필수)

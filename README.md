@@ -2,13 +2,17 @@
 
 A Next.js template for building AI agents with Claude Agent SDK and custom MCP tools.
 
+## Overview
+
+This template provides a complete foundation for building AI agents powered by Claude Sonnet 4.5. It demonstrates how to create custom tools, integrate with external services, and build interactive chat interfaces with real-time streaming.
+
 ## Features
 
-- **Claude Agent SDK Integration** - Multi-turn agentic workflows with Claude Sonnet 4.5
-- **Custom MCP Tools** - Extend agent capabilities with your own tools
-- **Real-time Streaming** - Server-sent events for token-by-token responses
-- **Modern UI** - Built with Next.js 15, React 19, and Tailwind CSS
-- **TypeScript** - Fully typed for better DX
+- **Multi-turn Agent Workflows** - Built on Claude Agent SDK for complex task execution
+- **Custom MCP Tools** - Easy-to-extend tool system with type safety
+- **Real-time Streaming** - Server-sent events for responsive user experience
+- **Modern Stack** - Next.js 15, React 19, Tailwind CSS, TypeScript
+- **Built-in Tools** - File operations, bash commands, web search, and more
 
 ## Quick Start
 
@@ -48,147 +52,219 @@ A Next.js template for building AI agents with Claude Agent SDK and custom MCP t
 
    Open http://localhost:3000 in your browser.
 
-## Project Structure
+## Architecture
+
+### System Overview
+
+The agent system is built on three core components:
+
+1. **Agent API** (`app/api/agent/route.ts`) - Handles requests, manages conversation state, and streams responses
+2. **MCP Tools** (`lib/mcp-tools/`) - Custom tools that extend agent capabilities
+3. **Chat UI** (`components/agent-chat.tsx`) - Interactive interface with real-time streaming
+
+### Message Flow
 
 ```
-/
-├── app/
-│   ├── api/agent/route.ts     # Agent API endpoint (Claude SDK integration)
-│   └── page.tsx               # Main chat interface
-├── components/
-│   └── agent-chat.tsx         # Chat UI component
-├── lib/
-│   ├── mcp-tools.ts           # MCP tools registry
-│   └── mcp-tools/
-│       └── hello-world.ts     # Example MCP tool
-└── .env.example               # Environment variables template
+User Input
+  ↓
+POST /api/agent → query({ prompt, options })
+  ↓
+Agent executes tools across multiple turns
+  ↓
+Server-Sent Events stream to client
+  ↓
+UI displays tool usage and results
 ```
 
-## Adding Custom Tools
+### Agent Configuration
 
-This template includes a simple `hello-world` tool as an example. To add your own tools:
+- **Model**: Claude Sonnet 4.5 (`claude-sonnet-4-5-20250929`)
+- **Built-in Tools**: Read, Write, Bash, Grep, Glob, WebSearch
+- **Custom Tools**: Defined via MCP (Model Context Protocol)
+- **Max Turns**: 10 per conversation
+- **Streaming**: Yes (Server-Sent Events)
 
-### 1. Create a new tool file
+## Creating Custom Tools
 
-Create a new file in `lib/mcp-tools/`:
+### Tool Structure
+
+Tools are defined using the `tool()` function from the Claude Agent SDK:
 
 ```typescript
-// lib/mcp-tools/my-tool.ts
 import { tool } from "@anthropic-ai/claude-agent-sdk";
 import { z } from "zod";
 
-export const myTool = tool(
-  "my-tool",
-  "Description of what your tool does",
+export const searchDatabase = tool(
+  "search-database",              // Unique tool name
+  "Search database records",      // Description for the agent
   {
-    // Define parameters using Zod schemas
-    param1: z.string().describe("Description of param1"),
-    param2: z.number().optional().describe("Optional param2"),
+    query: z.string().describe("Search query"),
+    limit: z.number().optional().default(10).describe("Max results"),
   },
-  async ({ param1, param2 }) => {
-    // Implement your tool logic here
-    const result = doSomething(param1, param2);
+  async ({ query, limit = 10 }) => {
+    // Implementation
+    const results = await db.search(query, limit);
 
     return {
       content: [{
         type: "text" as const,
-        text: result,
+        text: JSON.stringify(results, null, 2),
       }],
     };
   }
 );
 ```
 
-### 2. Register the tool
+### Integration Steps
 
-Add your tool to `lib/mcp-tools.ts`:
+**1. Create tool file** in `lib/mcp-tools/your-tool.ts`
+
+**2. Register in `lib/mcp-tools.ts`:**
 
 ```typescript
 import { createSdkMcpServer } from "@anthropic-ai/claude-agent-sdk";
-import { helloWorldTool } from "./mcp-tools/hello-world";
-import { myTool } from "./mcp-tools/my-tool"; // Import your tool
+import { searchDatabase } from "./mcp-tools/search-database";
 
 export const customMcpServer = createSdkMcpServer({
   name: "custom-tools",
   version: "1.0.0",
-  tools: [
-    helloWorldTool,
-    myTool, // Add your tool here
-  ],
+  tools: [searchDatabase],
 });
 ```
 
-### 3. Update the agent configuration
-
-Add your tool to the allowed tools in `app/api/agent/route.ts`:
+**3. Configure in `app/api/agent/route.ts`:**
 
 ```typescript
 allowedTools: [
-  "Read",
-  "Write",
-  "Bash",
-  "Grep",
-  "Glob",
-  "WebSearch",
-  "mcp__0__hello-world",
-  "mcp__0__my-tool", // Add your tool here
+  "Read", "Write", "Bash", "Grep", "Glob", "WebSearch",
+  "mcp__0__search-database", // Add with mcp__0__ prefix
 ],
 ```
 
-### 4. Update the system prompt (optional)
+**4. Update system prompt** (optional) to guide tool usage
 
-Update the system prompt in `app/api/agent/route.ts` to describe when and how to use your tool.
+## Best Practices
 
-## Available Built-in Tools
+### Parameter Validation
 
-The agent has access to these built-in tools:
+Use Zod for type-safe parameter validation:
 
-- **Read** - Read files from the filesystem
-- **Write** - Write files to the filesystem
-- **Bash** - Execute bash commands
-- **Grep** - Search file contents using regex
-- **Glob** - Find files matching patterns
-- **WebSearch** - Search the web
-
-## Tech Stack
-
-- **Framework**: Next.js 15 with App Router
-- **AI SDK**: Claude Agent SDK (`@anthropic-ai/claude-agent-sdk`)
-- **Model**: Claude Sonnet 4.5 (`claude-sonnet-4-5-20250929`)
-- **UI**: React 19, Tailwind CSS, Framer Motion
-- **Language**: TypeScript
-
-## Use Cases
-
-This template is great for building:
-
-- **Domain-specific assistants** - Add tools for database queries, API calls, file processing
-- **Workflow automation** - Create tools for repetitive tasks in your domain
-- **Custom chatbots** - Extend agent capabilities with external services
-- **Research tools** - Build tools for data analysis, report generation, etc.
-
-## Learn More
-
-- [Claude Agent SDK Documentation](https://docs.anthropic.com/en/docs/agents)
-- [Model Context Protocol (MCP)](https://modelcontextprotocol.io/)
-- [Next.js Documentation](https://nextjs.org/docs)
-- [Anthropic API Reference](https://docs.anthropic.com/en/api)
-
-## Development
-
-```bash
-# Development server
-pnpm dev
-
-# Build for production
-pnpm build
-
-# Start production server
-pnpm start
-
-# Lint
-pnpm lint
+```typescript
+{
+  email: z.string().email().describe("User email"),
+  age: z.number().min(0).max(120).describe("User age"),
+  role: z.enum(["admin", "user", "guest"]).describe("Role"),
+  tags: z.array(z.string()).optional().describe("Optional tags"),
+}
 ```
+
+### Error Handling
+
+Always handle errors gracefully:
+
+```typescript
+async ({ param }) => {
+  try {
+    const result = await riskyOperation(param);
+    return {
+      content: [{ type: "text" as const, text: result }],
+    };
+  } catch (error) {
+    return {
+      content: [{
+        type: "text" as const,
+        text: `Error: ${error instanceof Error ? error.message : 'Unknown'}`,
+      }],
+      isError: true,
+    };
+  }
+}
+```
+
+### System Prompts
+
+Good system prompts should:
+
+1. Define the agent's role and purpose
+2. List available tools with usage guidelines
+3. Provide examples of correct tool usage
+4. Set clear constraints and expectations
+
+## Advanced Examples
+
+### External API Integration
+
+```typescript
+export const fetchWeather = tool(
+  "fetch-weather",
+  "Get weather for a city",
+  { city: z.string().describe("City name") },
+  async ({ city }) => {
+    const response = await fetch(`https://api.weather.com/v1/current?city=${city}`);
+    const data = await response.json();
+    return {
+      content: [{
+        type: "text" as const,
+        text: `${city}: ${data.condition}, ${data.temp}°C`,
+      }],
+    };
+  }
+);
+```
+
+### Database Queries
+
+```typescript
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+export const queryUsers = tool(
+  "query-users",
+  "Query users from database",
+  { filter: z.string().optional() },
+  async ({ filter }) => {
+    const users = await prisma.user.findMany({
+      where: filter ? { name: { contains: filter } } : {},
+    });
+    return {
+      content: [{ type: "text" as const, text: JSON.stringify(users) }],
+    };
+  }
+);
+```
+
+## Troubleshooting
+
+**Tool not found**
+- Verify tool is exported from `lib/mcp-tools/your-tool.ts`
+- Check it's imported in `lib/mcp-tools.ts`
+- Ensure it's added to `allowedTools` with `mcp__0__` prefix
+
+**Streaming issues**
+- Verify `Content-Type: text/event-stream` header
+- Check browser console for errors
+- Ensure SSE format: `data: {...}\n\n`
+
+**Type errors**
+- Match Zod schemas to parameter types
+- Return `{ content: [...] }` or `{ content: [...], isError: true }`
+
+## Resources
+
+- [Claude Agent SDK](https://docs.claude.com/en/docs/agent-sdk/overview)
+- [Model Context Protocol](https://modelcontextprotocol.io/)
+- [Zod Documentation](https://zod.dev/)
+- [Next.js Documentation](https://nextjs.org/docs)
+
+## Contributing
+
+Guidelines for contributions:
+- Keep tools focused and simple
+- Document parameters clearly
+- Handle all error cases
+- Write descriptive system prompts
+- Test with various inputs
 
 ## License
 
