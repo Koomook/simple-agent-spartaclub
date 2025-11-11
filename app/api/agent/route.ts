@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
                   sdk: "@anthropic-ai/claude-agent-sdk",
                   model: "claude-sonnet-4-5-20250929",
                   maxTurns: 10,
-                  tools: ["Read", "Write", "Bash", "Grep", "Glob", "WebSearch"],
+                  tools: ["Read", "Write", "Bash", "Grep", "Glob", "WebSearch", "WebFetch"],
                   customTools: ["hello-world", "search-courses"]
                 },
                 timestamp: new Date().toISOString(),
@@ -88,6 +88,7 @@ export async function POST(request: NextRequest) {
 
 - **Read, Write, Bash, Grep, Glob**: 파일 작업용
 - **WebSearch**: 최신 정보 검색용
+- **WebFetch**: 웹 페이지 내용 가져오기
 - **hello-world**: 예시 도구
 
 # 커뮤니케이션 스타일 (Communication Style)
@@ -148,6 +149,7 @@ You: "네! 무료로 시작할 수 있는 강의들을 찾아드릴게요 💰"
               "Grep",
               "Glob",
               "WebSearch",
+              "WebFetch",
               "mcp__0__hello-world", // Auto-approve custom hello-world tool
               "mcp__0__search-courses", // Auto-approve search-courses tool
             ],

@@ -8,7 +8,7 @@
 - 카테고리: AI·GPT (17개), 개발 (11개), 기타 (8개), 취업·자격증 (6개), 데이터 (5개), 디자인 (1개)
 - 무료 강의 21개, 국비 지원 강의 24개
 
-## Phase 1: 데이터베이스 연동
+## Issue 1: 데이터베이스 연동
 
 ### 1.1 Prisma 설정
 ```bash
@@ -43,7 +43,7 @@ npx prisma generate
 ### 1.4 툴 등록
 `lib/mcp-tools.ts`에 `search-courses` 추가
 
-## Phase 2: 브랜드 아이덴티티 적용
+## Issue 2: 브랜드 아이덴티티 적용
 
 ### 2.1 브랜드 추출 (Playwright MCP)
 - https://spartaclub.kr 접속 및 스크린샷
