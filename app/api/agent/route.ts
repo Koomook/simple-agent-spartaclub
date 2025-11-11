@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
                 content: {
                   message: "Claude Agent initialized with custom tools",
                   sdk: "@anthropic-ai/claude-agent-sdk",
-                  model: "claude-sonnet-4-5-20250929",
+                  model: "claude-haiku-4-5",
                   maxTurns: 10,
                   tools: ["Read", "Write", "Bash", "Grep", "Glob", "WebSearch"],
                   customTools: ["hello-world"]
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
           prompt: prompt || messages[messages.length - 1]?.text || "",
           options: {
             ...(sessionId ? { resume: sessionId } : {}), // Resume session if sessionId exists
-            model: "claude-sonnet-4-5-20250929",
+            model: "claude-haiku-4-5",
             systemPrompt: `You are an AI assistant powered by Claude Agent SDK with custom MCP tools.
 
 # Your Role & Capabilities
